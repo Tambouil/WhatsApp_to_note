@@ -1,39 +1,34 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
-import { Copy } from "lucide-react";
-import { FormEvent, useState } from "react";
-import { toast } from "sonner";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
+import { Copy } from 'lucide-react';
+import { FormEvent, useState } from 'react';
+import { toast } from 'sonner';
 
 export default function Home() {
-  const [formattedMessage, setFormattedMessage] = useState("");
+  const [formattedMessage, setFormattedMessage] = useState('');
 
   const handleFormat = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const message = formData.get("message") as string;
+    const message = formData.get('message') as string;
 
-    const messages = message.replaceAll("\n", " ").trim().split("[");
+    const messages = message.replaceAll('\n', ' ').trim().split('[');
 
     for (let i = 0; i < messages.length; i++) {
-      if (messages[i].includes("]")) {
-        messages[i] = messages[i]
-          .split("]")[1]
-          .split(":")
-          .slice(1)
-          .join(":")
-          .trim();
+      if (messages[i].includes(']')) {
+        messages[i] = messages[i].split(']')[1].split(':').slice(1).join(':').trim();
       }
     }
 
-    setFormattedMessage(messages.filter(Boolean).join("\n"));
+    setFormattedMessage(messages.filter(Boolean).join('\n'));
   };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(formattedMessage);
-    toast.success("Le message a été copié avec succès.");
+    toast.success('Le message a été copié avec succès.');
   };
 
   return (
@@ -44,12 +39,8 @@ export default function Home() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleFormat} className="space-y-4">
-            <Textarea
-              name="message"
-              placeholder="Entrez votre message"
-              className="min-h-32"
-            />
-            <Button className="w-full">Formatter</Button>
+            <Textarea name="message" placeholder="Entrez votre message" className="min-h-32" />
+            <Button className="w-full">Formater</Button>
           </form>
         </CardContent>
       </Card>
@@ -63,9 +54,7 @@ export default function Home() {
               </Button>
             </div>
           </CardHeader>
-          <CardContent className="whitespace-pre-wrap">
-            {formattedMessage}
-          </CardContent>
+          <CardContent className="whitespace-pre-wrap">{formattedMessage}</CardContent>
         </Card>
       )}
     </div>
