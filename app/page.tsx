@@ -15,15 +15,27 @@ export default function Home() {
     const formData = new FormData(event.currentTarget);
     const message = formData.get('message') as string;
 
-    const messages = message.replaceAll('\n', ' ').trim().split('[');
+    // Diviser le message par lignes
+    const lines = message.split('\n');
+    const formattedLines = [];
 
-    for (let i = 0; i < messages.length; i++) {
-      if (messages[i].includes(']')) {
-        messages[i] = messages[i].split(']')[1].split(':').slice(1).join(':').trim();
+    for (const line of lines) {
+      // Nettoyer chaque ligne
+      let formattedLine = line.trim();
+      
+      // Supprimer les références [1][5] etc.
+      formattedLine = formattedLine.replace(/\[\d+\]/g, '');
+      
+      // Supprimer les dates WhatsApp et les noms qui suivent
+      formattedLine = formattedLine.replace(/\[\d{2}\/\d{2}\s\d{2}:\d{2}\]\s[^:]+:\s/, '');
+      
+      // Ajouter la ligne si elle n'est pas vide
+      if (formattedLine) {
+        formattedLines.push(formattedLine);
       }
     }
 
-    setFormattedMessage(messages.filter(Boolean).join('\n'));
+    setFormattedMessage(formattedLines.join('\n'));
   };
 
   const handleCopy = () => {
